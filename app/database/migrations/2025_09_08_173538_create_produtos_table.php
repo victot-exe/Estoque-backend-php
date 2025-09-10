@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->decimal('valorDeCompra', 10, 2);
             $table->decimal('valorDeVenda', 10, 2);
-            $table->foreignId('fornecedor_id')->constrained('fornecedores');
+            $table->foreignId('fornecedor_id')->constrained('fornecedors');
             $table->timestamps();
         });
     }

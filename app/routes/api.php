@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FornecedorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
@@ -19,3 +20,5 @@ Route::middleware('api')->get('/hello', function (Request $request) {
 });
 
 Route::apiResource('tasks', TaskController::class);
+
+Route::apiResource('fornecedores', FornecedorController::class);

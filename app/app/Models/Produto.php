@@ -1,5 +1,5 @@
 <?php
-//TODO rodar todas a migrations, ainda não rodou
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
