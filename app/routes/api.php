@@ -21,4 +21,5 @@ Route::middleware('api')->get('/hello', function (Request $request) {
 
 Route::apiResource('tasks', TaskController::class);
 
-Route::apiResource('fornecedores', FornecedorController::class);
+Route::apiResource('fornecedores', FornecedorController::class)
+->parameters(['fornecedores' => 'fornecedor']);
