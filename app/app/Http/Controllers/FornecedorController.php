@@ -32,16 +32,17 @@ class FornecedorController extends Controller
      * Display the specified resource.
      */
     public function show(Fornecedor $fornecedor)
-    {
-        return "Nao implementado ainda";
+    {//TODO essa é o getById
+        return $fornecedor;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Fornecedor $fornecedor)
+    public function update(StoreFornecedorRequest $request, Fornecedor $fornecedor)
     {
-        
+            $result = $this->service->update($fornecedor, $request->validated());
+            return response()->json($result, 200);
     }
 
     /**
@@ -49,6 +50,7 @@ class FornecedorController extends Controller
      */
     public function destroy(Fornecedor $fornecedor)
     {
-        return $this->service->delete($fornecedor);
+        $this->service->delete($fornecedor);
+        return response()->noContent();
     }
 }
