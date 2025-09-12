@@ -14,7 +14,9 @@ class StoreEstoqueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'produto_id' => ['required', 'integer', 'exists:produtos,id'],
+            'validade' => ['required', 'date', 'after_or_equal:today'],
+            'quantidade' => ['required', 'integer', 'min:0'],
         ];
     }
 }
