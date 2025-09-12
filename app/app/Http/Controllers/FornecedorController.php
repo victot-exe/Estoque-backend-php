@@ -32,7 +32,7 @@ class FornecedorController extends Controller
      * Display the specified resource.
      */
     public function show(Fornecedor $fornecedor)
-    {//TODO essa é o getById
+    {
         return $fornecedor;
     }
 
