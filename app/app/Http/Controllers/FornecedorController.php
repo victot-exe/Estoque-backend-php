@@ -33,7 +33,7 @@ class FornecedorController extends Controller
      */
     public function show(Fornecedor $fornecedor)
     {
-        return $fornecedor;
+        return response()->json($fornecedor, 200);
     }
 
     /**
