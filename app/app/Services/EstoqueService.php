@@ -25,4 +25,12 @@ class EstoqueService implements EstoqueServiceInterface{
             $estoque->delete();
         });
     }
+
+    public function getAllEstoqueGroupByValidadeAndProduto(){
+        return Estoque::query()
+        ->select('produto_id','validade',DB::raw('SUM(quantidade) as quantidade'))
+        ->groupBy('produto_id', 'validade')
+        ->orderBy('validade')
+        ->get();
+    }
 }

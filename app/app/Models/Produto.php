@@ -11,8 +11,6 @@ class Produto extends Model
 
     protected $fillable = [
         'title',
-        'valorDeCompra',
-        'valorDeVenda',
         'fornecedor_id'
     ];
 }

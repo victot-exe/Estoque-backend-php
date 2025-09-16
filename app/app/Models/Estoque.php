@@ -11,7 +11,9 @@ class Estoque extends Model
 
     protected $fillable = [
         'produto_id',
+        'valorDeCompra',
+        'valorDeVenda',
         'validade',
-        'quantidade'
+        'quantidade',
     ];
 }

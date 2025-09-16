@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEstoqueRequest;
 use App\Models\Estoque;
 use App\Services\Contracts\EstoqueServiceInterface;
-use Illuminate\Http\Request;
 
 class EstoqueController extends Controller
 {
@@ -36,5 +35,11 @@ class EstoqueController extends Controller
     {
         $this->service->delete($estoque);
         return response()->noContent();
+    }
+
+    public function showGroupByValidade(){
+        $result = $this->service->getAllEstoqueGroupByValidadeAndProduto();
+
+        return response()->json($result, 200);
     }
 }

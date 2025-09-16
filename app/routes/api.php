@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\ProdutoController;
 use Illuminate\Http\Request;
@@ -16,3 +17,7 @@ Route::apiResource('fornecedores', FornecedorController::class)
 ->parameters(['fornecedores' => 'fornecedor']);
 
 Route::apiResource('produtos', ProdutoController::class);
+
+Route::get('estoques/por-validade', [EstoqueController::class, 'showGroupByValidade'])
+->name('estoques.por-validade');
+Route::apiResource('estoques', EstoqueController::class);

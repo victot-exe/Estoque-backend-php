@@ -11,8 +11,6 @@ return new class extends Migration
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->decimal('valorDeCompra', 10, 2);
-            $table->decimal('valorDeVenda', 10, 2);
             $table->foreignId('fornecedor_id')->constrained('fornecedors');
             $table->timestamps();
         });
