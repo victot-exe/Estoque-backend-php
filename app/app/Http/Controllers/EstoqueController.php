@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEstoqueRequest;
 use App\Models\Estoque;
 use App\Services\Contracts\EstoqueServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class EstoqueController extends Controller
 {
     public function __construct(private EstoqueServiceInterface $service) {}
+    
     public function index()
     {
         return Estoque::latest()->paginate(10);
@@ -16,8 +18,14 @@ class EstoqueController extends Controller
 
     public function store(StoreEstoqueRequest $request)
     {
-        $result = $this->service->create($request->validated());
-        return response()->json($result, 201);
+        // $result = $this->service->create($request->validated());
+
+
+        // Log::info('quero ver o que da pegando',['request'=>$request]);
+
+
+        // return response()->json($result, 201);
+        echo 'chegou aqui porra';
     }
 
     public function show(Estoque $estoque)

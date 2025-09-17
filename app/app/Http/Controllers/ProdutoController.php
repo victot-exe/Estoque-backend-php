@@ -9,17 +9,12 @@ use App\Services\Contracts\ProdutoServiceInterface;
 class ProdutoController extends Controller
 {
     public function __construct(private ProdutoServiceInterface $service){}
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         return Produto::latest()->paginate(10);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreProdutoRequest $request)
     {
         $produto = $this->service->create($request->validated());

@@ -16,4 +16,11 @@ class Estoque extends Model
         'validade',
         'quantidade',
     ];
+
+    protected $casts = [
+        'validade' => 'date:Y-m-d',
+        'valorDeCompra' => 'decimal:2',
+        'valorDeVenda'  => 'decimal:2',
+        'quantidade'    => 'integer',
+    ];
 }
