@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 class EstoqueService implements EstoqueServiceInterface{
     
     public function create(array $data): Estoque{
-        var_dump($data);
         
         return DB::transaction(function() use($data){
             return Estoque::create($data);

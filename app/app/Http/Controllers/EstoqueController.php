@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEstoqueRequest;
 use App\Models\Estoque;
+use Illuminate\Http\Request;
 use App\Services\Contracts\EstoqueServiceInterface;
-use Illuminate\Support\Facades\Log;
 
 class EstoqueController extends Controller
 {
@@ -13,19 +13,14 @@ class EstoqueController extends Controller
     
     public function index()
     {
-        return Estoque::latest()->paginate(10);
+        return Estoque::lastes()->paginate(10);
     }
 
     public function store(StoreEstoqueRequest $request)
     {
-        // $result = $this->service->create($request->validated());
+        $result = $this->service->create($request->validated());
 
-
-        // Log::info('quero ver o que da pegando',['request'=>$request]);
-
-
-        // return response()->json($result, 201);
-        echo 'chegou aqui porra';
+        return response()->json($result, 201);
     }
 
     public function show(Estoque $estoque)
@@ -33,12 +28,19 @@ class EstoqueController extends Controller
         return response()->json($estoque, 200);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(StoreEstoqueRequest $request, Estoque $estoque)
     {
         $result = $this->service->update($estoque, $request->validated());
+
         return response()->json($result, 200);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Estoque $estoque)
     {
         $this->service->delete($estoque);
