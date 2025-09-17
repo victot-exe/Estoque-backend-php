@@ -15,8 +15,6 @@ class StoreProdutoRequest extends FormRequest//TODO fazer um de update
     {
         return [
             'title' => 'required|string|max:255',
-            'valorDeCompra' => ['required', 'numeric', 'decimal:0,2', 'min:0'],
-            'valorDeVenda' => ['sometimes', 'required', 'numeric', 'decimal:0,2', 'min:0', 'gte:valorDeCompra'],
             'fornecedor_id' => ['required', 'integer', 'exists:fornecedors,id'],
         ];
     }

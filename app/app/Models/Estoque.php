@@ -11,7 +11,16 @@ class Estoque extends Model
 
     protected $fillable = [
         'produto_id',
+        'valorDeCompra',
+        'valorDeVenda',
         'validade',
-        'quantidade'
+        'quantidade',
+    ];
+
+    protected $casts = [
+        'validade' => 'date:Y-m-d',
+        'valorDeCompra' => 'decimal:2',
+        'valorDeVenda'  => 'decimal:2',
+        'quantidade'    => 'integer',
     ];
 }

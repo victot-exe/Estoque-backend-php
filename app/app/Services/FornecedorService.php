@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class FornecedorService implements FornecedorServiceInterface{
 
-    public function create(array $data): Fornecedor{
+    public function create(array $data): Fornecedor{//TODO implementar o repository
 
         return DB::transaction(function() use ($data){
             return Fornecedor::create($data);

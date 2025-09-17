@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class EstoqueService implements EstoqueServiceInterface{
     
     public function create(array $data): Estoque{
+        
         return DB::transaction(function() use($data){
             return Estoque::create($data);
         });
@@ -24,5 +25,13 @@ class EstoqueService implements EstoqueServiceInterface{
         DB::transaction(function() use($estoque){
             $estoque->delete();
         });
+    }
+
+    public function getAllEstoqueGroupByValidadeAndProduto(){
+        return Estoque::query()
+        ->select('produto_id','validade',DB::raw('SUM(quantidade) as quantidade'))
+        ->groupBy('produto_id', 'validade')
+        ->orderBy('validade')
+        ->get();
     }
 }

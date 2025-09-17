@@ -11,6 +11,8 @@ return new class extends Migration
         Schema::create('estoques', function (Blueprint $table) {
             $table->id();
             $table->foreignId('produto_id')->constrained('produtos')->onDelete('cascade');
+            $table->decimal('valorDeCompra', 10, 2);
+            $table->decimal('valorDeVenda', 10, 2);
             $table->date('validade');
             $table->integer('quantidade');
             $table->timestamps();

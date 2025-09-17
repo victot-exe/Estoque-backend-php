@@ -14,9 +14,11 @@ class StoreEstoqueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'produto_id' => ['required', 'integer', 'exists:produtos,id'],
-            'validade' => ['required', 'date', 'after_or_equal:today'],
-            'quantidade' => ['required', 'integer', 'min:0'],
+            'produto_id'     => 'required|integer|exists:produtos,id', // Mantido, pois é importante validar a existência do produto
+            'valorDeCompra'  => 'required|numeric', // Removido o mínimo de 0
+            'valorDeVenda'   => 'required|numeric|gte:valorDeCompra', // Permite qualquer valor maior ou igual a valorDeCompra
+            'validade'       => 'required|date', // Removido o requisito de data futura
+            'quantidade'     => 'required|integer', // Removido o mínimo de 0
         ];
     }
 }

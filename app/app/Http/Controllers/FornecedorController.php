@@ -10,17 +10,12 @@ use Illuminate\Http\Request;
 class FornecedorController extends Controller
 {
     public function __construct(private FornecedorServiceInterface $service){}
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         return Fornecedor::latest()->paginate(10);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreFornecedorRequest $request)
     {
         $fornecedor = $this->service->create($request->validated());
@@ -28,26 +23,17 @@ class FornecedorController extends Controller
         return response()->json($fornecedor, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Fornecedor $fornecedor)
     {
         return response()->json($fornecedor, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(StoreFornecedorRequest $request, Fornecedor $fornecedor)
     {
             $result = $this->service->update($fornecedor, $request->validated());
             return response()->json($result, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Fornecedor $fornecedor)
     {
         $this->service->delete($fornecedor);
