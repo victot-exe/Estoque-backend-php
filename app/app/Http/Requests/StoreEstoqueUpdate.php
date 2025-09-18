@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class StoreProdutoRequest extends FormRequest
+class StoreEstoqueUpdate extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,8 +16,11 @@ class StoreProdutoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'fornecedor_id' => ['required', 'integer', 'exists:fornecedors,id'],
+            'produto_id'    => 'sometimes|required|integer|exists:produtos,id',
+            'valorDeCompra' => 'sometimes|required|numeric|min:0|required_with:valorDeVenda',
+            'valorDeVenda'  => 'sometimes|required|numeric|required_with:valorDeCompra|gte:valorDeCompra',
+            'validade'      => 'sometimes|required|date|after:today',
+            'quantidade'    => 'sometimes|required|integer|min:0',
         ];
     }
 
