@@ -7,4 +7,5 @@ interface ProdutoServiceInterface{
     public function create(array $data): Produto;
     public function update(Produto $produto, array $data): Produto;
     public function delete(Produto $produto): void;
+    public function showAllInformations();
 }

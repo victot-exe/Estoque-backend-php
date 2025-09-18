@@ -23,4 +23,9 @@ class Estoque extends Model
         'valorDeVenda'  => 'decimal:2',
         'quantidade'    => 'integer',
     ];
+
+    public function produto()
+    {
+        return $this->belongsTo(Produto::class);
+    }
 }
