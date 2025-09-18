@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProdutoRequest;
+use App\Http\Requests\StoreProdutoUpdate;
 use App\Models\Produto;
 use App\Services\Contracts\ProdutoServiceInterface;
 
@@ -22,26 +23,17 @@ class ProdutoController extends Controller
         return response()->json($produto, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Produto $produto)
     {
         return $produto;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(StoreProdutoRequest $request, Produto $produto)
+    public function update(StoreProdutoUpdate $request, Produto $produto)
     {
         $result = $this->service->update($produto, $request->validated());
         return response()->json($result, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Produto $produto)
     {
         $this->service->delete($produto);

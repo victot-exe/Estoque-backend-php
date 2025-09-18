@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFornecedorRequest;
+use App\Http\Requests\StoreFornecedorUpdate;
 use App\Models\Fornecedor;
 use App\Services\Contracts\FornecedorServiceInterface;
-use Illuminate\Http\Request;
 
 class FornecedorController extends Controller
 {
@@ -28,7 +28,7 @@ class FornecedorController extends Controller
         return response()->json($fornecedor, 200);
     }
 
-    public function update(StoreFornecedorRequest $request, Fornecedor $fornecedor)
+    public function update(StoreFornecedorUpdate $request, Fornecedor $fornecedor)
     {
             $result = $this->service->update($fornecedor, $request->validated());
             return response()->json($result, 200);
