@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use App\Models\Estoque;
 use App\Models\Produto;
 use App\Services\Contracts\ProdutoServiceInterface;
 use Illuminate\Support\Facades\DB;

@@ -39,4 +39,10 @@ class FornecedorController extends Controller
         $this->service->delete($fornecedor);
         return response()->noContent();
     }
+
+    public function showAllInformations(){
+        $result = $this->service->showAllInformations();
+
+        return response()->json($result, 200);
+    }
 }

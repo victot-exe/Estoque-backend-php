@@ -10,6 +10,7 @@ Route::middleware('api')->get('/hello', function (Request $request) {
     return response()->json(['message' => 'API funcionando!']);
 });
 
+Route::get('fornecedores/all-informations', [FornecedorController::class, 'showAllInformations']);
 Route::apiResource('fornecedores', FornecedorController::class)
 ->parameters(['fornecedores' => 'fornecedor']);
 
