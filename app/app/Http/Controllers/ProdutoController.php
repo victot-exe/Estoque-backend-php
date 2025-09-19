@@ -39,4 +39,9 @@ class ProdutoController extends Controller
         $this->service->delete($produto);
         return response()->noContent();
     }
+
+    public function showAllAgruped(){
+        $result = $this->service->showAllInformations();
+        return response()->json($result, 200);
+    }
 }
