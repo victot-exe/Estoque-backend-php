@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
-class StoreFornecedorRequest extends FormRequest
+class StoreFornecedorUpdate extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,7 +16,7 @@ class StoreFornecedorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'sometimes|required|string|max:255',
+            'sometimes|required|string|max:255',
             'telefone' => 'sometimes|required|regex:/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/',
         ];
     }
@@ -27,6 +27,7 @@ class StoreFornecedorRequest extends FormRequest
             'nome.required'     => 'O nome é obrigatório.',
             'nome.string'       => 'O nome deve ser um texto.',
             'nome.max'          => 'O nome deve ter no máximo 255 caracteres.',
+
             'telefone.required' => 'O telefone é obrigatório.',
             'telefone.regex'    => 'O telefone deve estar em um formato válido, por exemplo: (11) 91234-5678 ou 11912345678.',
         ];
@@ -34,11 +35,13 @@ class StoreFornecedorRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        $errors = $validator->errors();
+
         throw new ValidationException(
             $validator,
             response()->json([
-                'message' => 'Os dados fornecidos são inválidos.',
-                'errors'  => $validator->errors(),
+                'message' => $errors->first(),
+                'errors'  => $errors->toArray(),
             ], 422)
         );
     }

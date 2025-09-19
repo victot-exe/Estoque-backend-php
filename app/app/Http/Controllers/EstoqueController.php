@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEstoqueRequest;
+use App\Http\Requests\StoreEstoqueUpdate;
 use App\Models\Estoque;
-use Illuminate\Http\Request;
 use App\Services\Contracts\EstoqueServiceInterface;
 
 class EstoqueController extends Controller
@@ -28,19 +28,13 @@ class EstoqueController extends Controller
         return response()->json($estoque, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(StoreEstoqueRequest $request, Estoque $estoque)
+    public function update(StoreEstoqueUpdate $request, Estoque $estoque)
     {
         $result = $this->service->update($estoque, $request->validated());
 
         return response()->json($result, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Estoque $estoque)
     {
         $this->service->delete($estoque);
