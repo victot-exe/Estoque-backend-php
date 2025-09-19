@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class FornecedorService implements FornecedorServiceInterface{
 
-    public function create(array $data): Fornecedor{//TODO implementar o repository
+    public function create(array $data): Fornecedor{
 
         return DB::transaction(function() use ($data){
             return Fornecedor::create($data);
@@ -32,7 +32,7 @@ class FornecedorService implements FornecedorServiceInterface{
         });
     }
 
-    public function showAllInformations()
+    public function getAll()
     {
         $fornecedores = Fornecedor::with([
             'produtos:id,title,fornecedor_id',
@@ -43,25 +43,32 @@ class FornecedorService implements FornecedorServiceInterface{
             $produtos = $f->produtos->map(function ($p) {
                 $grupos = $p->estoques
                     ->sortBy([['validade', 'asc'], ['valorDeCompra', 'asc'], ['valorDeVenda', 'asc']])
-                    ->groupBy(fn($e) => $e->validade->toDateString()) // agrupa por data
-                    ->map(function ($byValidade) {
-                        return $byValidade->groupBy('valorDeCompra')
-                            ->map(function ($byCompra) {
-                                return $byCompra->groupBy('valorDeVenda')
-                                    ->map(function ($byVenda) {
-                                        return [
-                                            'quantidade_total' => $byVenda->sum('quantidade'),
-                                            'itens' => $byVenda->map->only([
-                                                'id',
-                                                'validade',
-                                                'valorDeCompra',
-                                                'valorDeVenda',
-                                                'quantidade'
-                                            ])->values(),
-                                        ];
-                                    });
-                            });
-                    });
+                    ->groupBy(fn($e) => $e->validade->toDateString())
+                    ->map(function ($byValidade, $validade) {
+                        return [
+                            'validade' => $validade,
+                            'grupos_compra' => $byValidade->groupBy('valorDeCompra')
+                                ->map(function ($byCompra, $valorCompra) {
+                                    return [
+                                        'valorDeCompra' => $valorCompra,
+                                        'grupos_venda' => $byCompra->groupBy('valorDeVenda')
+                                            ->map(function ($byVenda, $valorVenda) {
+                                                return [
+                                                    'valorDeVenda' => $valorVenda,
+                                                    'quantidade_total' => $byVenda->sum('quantidade'),
+                                                    'itens' => $byVenda->map->only([
+                                                        'id',
+                                                        'validade',
+                                                        'valorDeCompra',
+                                                        'valorDeVenda',
+                                                        'quantidade'
+                                                    ])->values(),
+                                                ];
+                                            })->values(),
+                                    ];
+                                })->values(),
+                        ];
+                    })->values();
 
                 return [
                     'produto_id' => $p->id,
@@ -79,5 +86,4 @@ class FornecedorService implements FornecedorServiceInterface{
 
         return $result;
     }
-
 }
