@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\EstoqueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -10,14 +11,19 @@ Route::middleware('api')->get('/hello', function (Request $request) {
     return response()->json(['message' => 'API funcionando!']);
 });
 
-Route::get('fornecedores/all-informations', [FornecedorController::class, 'showAllInformations']);
-Route::apiResource('fornecedores', FornecedorController::class)
-->parameters(['fornecedores' => 'fornecedor']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('produtos/all-informations', [ProdutoController::class, 'showAllAgruped']);
-Route::apiResource('produtos', ProdutoController::class);
+Route::middleware('auth:sanctum')->group(function(){
+    
+    Route::get('fornecedores/all-informations', [FornecedorController::class, 'showAllInformations']);
+    Route::apiResource('fornecedores', FornecedorController::class)
+        ->parameters(['fornecedores' => 'fornecedor']);
 
-Route::get('estoques/por-validade', [EstoqueController::class, 'showGroupByValidade'])
-->name('estoques.por-validade');
+    Route::get('produtos/all-informations', [ProdutoController::class, 'showAllAgruped']);
+    Route::apiResource('produtos', ProdutoController::class);
 
-Route::apiResource('estoques', EstoqueController::class);
+    Route::get('estoques/por-validade', [EstoqueController::class, 'showGroupByValidade'])
+        ->name('estoques.por-validade');
+    Route::apiResource('estoques', EstoqueController::class);
+});
