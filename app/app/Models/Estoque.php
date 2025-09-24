@@ -28,4 +28,10 @@ class Estoque extends Model
     {
         return $this->belongsTo(Produto::class);
     }
+
+    public function eventos()
+    {
+        return $this->hasMany(Evento::class);
+    }
+
 }
