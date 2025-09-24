@@ -13,7 +13,7 @@ class EstoqueController extends Controller
     
     public function index()
     {
-        return Estoque::lastes()->paginate(10);
+        return Estoque::latest()->paginate(10);
     }
 
     public function store(StoreEstoqueRequest $request)

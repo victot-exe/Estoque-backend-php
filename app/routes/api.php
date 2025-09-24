@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\EventoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('estoques/por-validade', [EstoqueController::class, 'showGroupByValidade'])
         ->name('estoques.por-validade');
     Route::apiResource('estoques', EstoqueController::class);
+
+    Route::post('eventos/vender', [EventoController::class, 'vender']);
 });
