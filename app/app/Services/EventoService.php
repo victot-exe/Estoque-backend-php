@@ -15,14 +15,12 @@ class EventoService
             $quantidadeRestante = (int) $data['quantidade'];
             $produtoId = $data['produto_id'];
 
-            // Busca lotes (estoques) do produto com quantidade > 0, por validade (mais antigo primeiro)
             $estoques = Estoque::where('produto_id', $produtoId)
                 ->where('quantidade', '>', 0)
                 ->orderBy('validade', 'asc')
-                ->lockForUpdate() // trava linhas para evitar concorrência
+                ->lockForUpdate()
                 ->get();
 
-            // Verifica se tem estoque suficiente
             if ($estoques->sum('quantidade') < $quantidadeRestante) {
                 throw new Exception('Estoque insuficiente para atender a venda.');
             }
@@ -35,7 +33,6 @@ class EventoService
                 $disponivel = (int) $estoque->quantidade;
                 $deduzir = min($disponivel, $quantidadeRestante);
 
-                // cria evento referente a esse lote
                 $evento = Evento::create([
                     'evento'       => $data['evento'],
                     'dataDoEvento' => $data['dataDoEvento'],
@@ -45,18 +42,51 @@ class EventoService
 
                 $eventosCriados[] = $evento;
 
-                // decrementa o estoque
                 $estoque->decrement('quantidade', $deduzir);
 
-                // atualiza restante
                 $quantidadeRestante -= $deduzir;
             }
 
             return collect($eventosCriados)->map(function($e) {
-                // opcional: carregar relacionamento estoque associado para retorno
                 $e->load('estoque.produto');
                 return $e;
             })->values();
         });
+    }
+
+    public function getEventosAgrupados()
+    {
+        $totais = Evento::select(
+                'evento',
+                'dataDoEvento',
+                DB::raw('SUM(quantidade) as quantidadeTotal')
+            )
+            ->groupBy('evento', 'dataDoEvento')
+            ->get();
+
+        $eventos = $totais->map(function ($evento) {
+            $estoques = Evento::select(
+                    'eventos.id as evento_id',
+                    'eventos.estoque_id',
+                    'eventos.quantidade',
+                    'estoques.produto_id',
+                    'estoques.validade',
+                    'produtos.title as produto'
+                )
+                ->join('estoques', 'eventos.estoque_id', '=', 'estoques.id')
+                ->join('produtos', 'estoques.produto_id', '=', 'produtos.id')
+                ->where('eventos.evento', $evento->evento)
+                ->where('eventos.dataDoEvento', $evento->dataDoEvento)
+                ->get();
+
+            return [
+                'evento' => $evento->evento,
+                'dataDoEvento' => $evento->dataDoEvento,
+                'quantidadeTotal' => $evento->quantidadeTotal,
+                'estoques' => $estoques
+            ];
+        });
+
+        return $eventos;
     }
 }
