@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Models\Estoque;
 use App\Models\Evento;
+use App\Services\Contracts\EventoServiceInterface;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-class EventoService
+class EventoService implements EventoServiceInterface
 {
     public function vender(array $data)
     {
@@ -88,5 +89,24 @@ class EventoService
         });
 
         return $eventos;
+    }
+
+    function create(array $data){
+            return DB::transaction(function () use ($data) {
+            
+            $evento = Evento::create($data);
+
+            $estoque = Estoque::findOrFail($data['estoque_id']);
+
+            $novaQuantidade = $estoque->quantidade - $data['quantidade'];
+
+            if ($novaQuantidade < 0) {
+                throw new \Exception('Quantidade insuficiente no estoque.');
+            }
+
+            $estoque->update(['quantidade' => $novaQuantidade]);
+
+            return $evento;
+        });
     }
 }

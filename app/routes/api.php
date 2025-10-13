@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/logout', [AuthController::class, 'logout']);
     
     Route::get('fornecedores/all-informations', [FornecedorController::class, 'showAllInformations']);
+    Route::get('fornecedores/detail/{id}', [FornecedorController::class, 'getFornecedorEstoqueById']);
     Route::apiResource('fornecedores', FornecedorController::class)
         ->parameters(['fornecedores' => 'fornecedor']);
 
@@ -31,5 +32,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('estoques', EstoqueController::class);
 
     Route::post('eventos/vender', [EventoController::class, 'vender']);
+    Route::post('eventos/venda-unitaria', [EventoController::class, 'venderUnitario']);
     Route::get('eventos', [EventoController::class, 'vendasAgrupadas']);
 });

@@ -41,8 +41,12 @@ class FornecedorController extends Controller
     }
 
     public function showAllInformations(){
-        $result = $this->service->getAll();
+        $result = $this->service->getAll(15);
 
         return response()->json($result, 200);
+    }
+
+    public function getFornecedorEstoqueById($id){
+        return $this->service->getFornecedorEstoqueById($id);
     }
 }
