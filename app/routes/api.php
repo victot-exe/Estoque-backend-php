@@ -34,4 +34,5 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('eventos/vender', [EventoController::class, 'vender']);
     Route::post('eventos/venda-unitaria', [EventoController::class, 'venderUnitario']);
     Route::get('eventos', [EventoController::class, 'vendasAgrupadas']);
+    Route::delete('eventos/{evento}', [EventoController::class, 'destroy']);
 });

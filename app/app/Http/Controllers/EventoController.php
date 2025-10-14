@@ -44,5 +44,19 @@ class EventoController extends Controller
     public function venderUnitario (VendaUnitariaRequest $request){
         return $this->service->create($request->validated());
     }
-}
 
+    public function destroy(Evento $evento){
+        $deleted = $evento->delete();
+
+        try{
+            if(!$deleted){
+                throw new \Exception('A exclusão do evento foi impedida pela lógica interna.');
+            }
+            return response()->noContent();
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => 'Ocorreu um erro interno ao tentar excluir o evento.'
+            ], 500);
+        }
+    }
+}

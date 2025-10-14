@@ -51,4 +51,3 @@ class VendaUnitariaRequest extends FormRequest
         ], 422));
     }
 }
-
