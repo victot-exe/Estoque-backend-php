@@ -5,6 +5,7 @@ use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\ExportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('eventos/venda-unitaria', [EventoController::class, 'venderUnitario']);
     Route::get('eventos', [EventoController::class, 'vendasAgrupadas']);
     Route::delete('eventos/{evento}', [EventoController::class, 'destroy']);
+
+    Route::get('/exportar-relatorio', [ExportController::class, 'exportarRelatorio']);
 });
