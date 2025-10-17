@@ -30,6 +30,7 @@ class ExportController extends Controller
         foreach ($estoques as $estoque) {
             $dadosEstoque[] = [
                 'Produto' => $estoque->produto->title ?? 'N/A',
+                'Fornecedor' => $estoque->produto->fornecedor->nome ?? 'N/A',
                 'Qtd' => $estoque->quantidade,
                 'Preço de Compra' => $estoque->valorDeCompra,
                 'Preço de Venda' => $estoque->valorDeVenda,
