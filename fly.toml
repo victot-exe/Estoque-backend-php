@@ -1,52 +1,68 @@
-app = "estoque-backend-php"
-primary_region = "gru"
+# fly.toml - Arquivo de configuração para o Fly.io
+# Documentação: https://fly.io/docs/reference/configuration/
 
+# Nome da sua aplicação no Fly.io (deve ser único)
+app = 'estoque-backend-php'
+
+# Região primária onde sua aplicação será executada
+primary_region = 'gru'
+
+# Comando para acessar o console da aplicação com 'fly console'
+console_command = 'php /var/www/html/artisan tinker'
+
+# Seção de build: Define como sua imagem Docker será construída
 [build]
-  dockerfile = "docker/app/Dockerfile"
-  context = "."  # garante que todo o projeto seja enviado para o build
+  # Usa o builder otimizado para PHP do Fly.io, especificando a versão 8.2 que você usa.
+  builder = 'flyio/php:8.2'
+  
+  # Argumentos para o build: Instala as extensões PHP necessárias para o Laravel funcionar corretamente.
+  [build.args]
+    PHP_EXTENSIONS = "bcmath bz2 calendar ctype curl dba dom exif ffi fileinfo filter ftp gd gettext gmp hash iconv imap intl json ldap mbstring mysqli opcache pcntl pdo pdo_mysql pdo_pgsql pdo_sqlite pgsql phar posix redis session shmop simplexml soap sockets sodium sysvmsg sysvsem sysvshm tidy tokenizer xml xmlreader xmlrpc xmlwriter xsl zip"
 
+# Seção de deploy: Comandos que rodam a cada novo deploy
+[deploy]
+  # Executa as migrations do banco de dados automaticamente após o build.
+  # A flag '--force' é importante para ambientes de produção.
+  release_command = 'php artisan migrate --force'
+
+# Seção de variáveis de ambiente
 [env]
+  # Aponta o servidor web para a pasta 'public' do Laravel.
+  DOCUMENT_ROOT = 'public'
+  
+  # Direciona os logs para a saída padrão, permitindo que o Fly.io os capture.
+  LOG_CHANNEL = 'stderr'
+  
+  # Otimizações de performance para produção.
+  OPCACHE_ENABLE = '1'
+  OPCACHE_VALIDATE_TIMESTAMPS = '0'
+  
+  # Configurações essenciais do Laravel para o ambiente de produção.
   APP_ENV = "production"
   APP_DEBUG = "false"
-  APP_URL = "https://estoque-backend-php.fly.dev"
-  LOG_CHANNEL = "stderr"
-  DB_CONNECTION = "mysql"
-  DB_HOST = "mysql.internal"
-  DB_PORT = "3306"
-  DB_DATABASE = "laravel"
-  DB_USERNAME = "laravel"
-  DB_PASSWORD = "secret"
-  SESSION_DRIVER = "database"
-  CACHE_STORE = "database"
-  QUEUE_CONNECTION = "database"
+  APP_URL = "https://estoque-backend-php.fly.dev" # URL padrão do Fly.io
 
+# Seção de serviço HTTP: Define como o tráfego web é tratado
 [http_service]
-  internal_port = 80
+  internal_port = 8080 # Porta interna que o servidor web (Apache/Caddy) escuta.
   force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ["app"]
+  auto_stop_machines = true  # Desliga a máquina se não houver tráfego para economizar.
+  auto_start_machines = true # Liga a máquina quando chegar uma requisição.
+  min_machines_running = 0   # Mínimo de máquinas rodando (0 no plano gratuito).
+  processes = ['app']
 
-[[mounts]]
-  source = "storage_vol"
-  destination = "/var/www/html/storage"
-
-[[services]]
-  protocol = "tcp"
-  internal_port = 80
-  processes = ["app"]
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
-
-  [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
+  # Health checks: O Fly.io usa isso para saber se sua aplicação está saudável.
+  [[http_service.checks]]
+    interval = '10s'
+    timeout = '2s'
     grace_period = "5s"
-    restart_limit = 0
+    method = 'GET'
+    # Recomendo criar uma rota '/api/health' que retorne um JSON simples com status 200.
+    # Ex: Route::get('/health', fn () => response()->json(['status' => 'ok']));
+    path = '/api/health' 
+
+# Configuração da Máquina Virtual
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
