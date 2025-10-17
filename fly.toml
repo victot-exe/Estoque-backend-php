@@ -1,10 +1,12 @@
 app = 'estoque-backend-php'
+
 primary_region = 'gru'
 
 console_command = 'php /var/www/html/artisan tinker'
 
 [build]
   builder = "flyio/builder:latest"
+
 
 [deploy]
   release_command = 'php artisan migrate --force'
