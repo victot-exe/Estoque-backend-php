@@ -1,0 +1,53 @@
+# fly.toml file generated for Estoque-backend-php
+
+app = "estoque-backend-php"
+primary_region = "gru"
+
+[build]
+  dockerfile = "./docker/app/Dockerfile"
+
+[env]
+  APP_ENV = "production"
+  APP_DEBUG = "false"
+  APP_URL = "https://estoque-backend-php.fly.dev"
+  LOG_CHANNEL = "stderr"
+  DB_CONNECTION = "mysql"
+  DB_HOST = "mysql.internal"
+  DB_PORT = "3306"
+  DB_DATABASE = "laravel"
+  DB_USERNAME = "laravel"
+  DB_PASSWORD = "secret"
+  SESSION_DRIVER = "database"
+  CACHE_STORE = "database"
+  QUEUE_CONNECTION = "database"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[mounts]]
+  source = "storage_vol"
+  destination = "/var/www/html/storage"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 80
+  processes = ["app"]
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "5s"
+    restart_limit = 0
